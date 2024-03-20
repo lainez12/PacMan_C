@@ -1,71 +1,65 @@
-// Fichier pacman.c
-
 #include <stdio.h>
 #include "pacman.h"
 #include "pacgomme.h"
 
-// Fonction pour initialiser le pacman et le placer dans le labyrinthe
+//Mettre a pacman dans le labyrinthe
 void initialiser_pacman(Pacman *pacman, Labyrinthe *labyrinthe) {
-    // Placer le pacman au centre du labyrinthe
     pacman->position.x = TAILLE_LABYRINTHE / 2;
     pacman->position.y = TAILLE_LABYRINTHE / 2;
-
-    // Initialiser le nombre de vies du pacman
+    //mais il meur pas encore, jsp pk
     pacman->vies = 3;
 
-    // Initialiser le compteur de pac-gommes mangées
+    //jsp sil faut les comptabiliser
     pacman->pacgommes_mangees = 0;
 
-    // Placer le pacman dans le labyrinthe
+    // P de pacman
     labyrinthe->cases[pacman->position.x][pacman->position.y] = 'P';
 }
 
-// Fonction pour déplacer le pacman et gérer ses interactions avec les pac-gommes
+// deplacer le pacman et manger ses pac-gommes
 void deplacer_pacman(Pacman *pacman, Labyrinthe *labyrinthe, Position pacgommes[], int *nombre_pacgommes) {
-    // Obtenir la saisie de l'utilisateur pour le déplacement
     char direction;
     printf("Choisissez une direction (z: haut, q: gauche, s: bas, d: droite) : ");
-    scanf(" %c", &direction); // Utilisation de l'espace avant %c pour ignorer les caractères blancs (espaces, retours à la ligne, etc.)
+    scanf(" %c", &direction);
 
-    // Déplacer le pacman selon la direction choisie, s'il n'y a pas de mur
+    //cela il faut l'amelieure
     switch (direction) {
         case 'z':
              printf("Déplacement vers le haut.\n");
             if (pacman->position.x > 0 && labyrinthe->cases[pacman->position.x - 1][pacman->position.y] != '#') {
                 printf("Pas de mur, déplacement autorisé.\n");
-                labyrinthe->cases[pacman->position.x][pacman->position.y] = ' '; // Effacer la position actuelle du pacman
-                pacman->position.x--; // Déplacer le pacman vers le haut
+                labyrinthe->cases[pacman->position.x][pacman->position.y] = ' '; // Effacer la position 
+                pacman->position.x--; // Déplacer le pacman vers le haut marche pas
             } else {
                 printf("Il y a un mur.\n");
             }
             break;
         case 'q':
             if (pacman->position.y > 0 && labyrinthe->cases[pacman->position.x][pacman->position.y - 1] != '#') {
-                labyrinthe->cases[pacman->position.x][pacman->position.y] = ' '; // Effacer la position actuelle du pacman
-                pacman->position.y--; // Déplacer le pacman vers la gauche
+                labyrinthe->cases[pacman->position.x][pacman->position.y] = ' ';
+                pacman->position.y--;
             }
             break;
         case 's':
             if (pacman->position.x < TAILLE_LABYRINTHE - 1 && labyrinthe->cases[pacman->position.x + 1][pacman->position.y] != '#') {
-                labyrinthe->cases[pacman->position.x][pacman->position.y] = ' '; // Effacer la position actuelle du pacman
-                pacman->position.x++; // Déplacer le pacman vers le bas
+                labyrinthe->cases[pacman->position.x][pacman->position.y] = ' ';
+                pacman->position.x++;
             }
             break;
         case 'd':
             if (pacman->position.y < TAILLE_LABYRINTHE - 1 && labyrinthe->cases[pacman->position.x][pacman->position.y + 1] != '#') {
-                labyrinthe->cases[pacman->position.x][pacman->position.y] = ' '; // Effacer la position actuelle du pacman
-                pacman->position.y++; // Déplacer le pacman vers la droite
+                labyrinthe->cases[pacman->position.x][pacman->position.y] = ' '; 
+                pacman->position.y++;
             }
             break;
     }
-    printf("\nvoila %d\n",pacman->position.x);
-    // Vérifier s'il y a une pac-gomme à la nouvelle position du pacman
+    //faire disparraitre le pacgommes
     if (position_a_pacgomme(pacgommes, *nombre_pacgommes, pacman->position)) {
-        supprimer_pacgomme(pacgommes, *nombre_pacgommes, pacman->position); // Supprimer la pac-gomme mangée
-        (*nombre_pacgommes)--; // Réduire le nombre total de pac-gommes
-        pacman->pacgommes_mangees++; // Incrémenter le compteur de pac-gommes mangées
+        supprimer_pacgomme(pacgommes, *nombre_pacgommes, pacman->position);
+        (*nombre_pacgommes)--;
+        pacman->pacgommes_mangees++;
     }
 
-    // Placer le pacman à sa nouvelle position dans le labyrinthe
+    // nouvelle position?
     labyrinthe->cases[pacman->position.x][pacman->position.y] = 'P';
 }

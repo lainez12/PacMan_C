@@ -1,5 +1,3 @@
-// Fichier main.c
-
 #include <stdio.h>
 #include <stdlib.h>
 #include "pacman.h"
@@ -7,49 +5,44 @@
 #include "labyrinthe.h"
 #include "pacgomme.h"
 
-#define NB_FANTOMES 4 // Nombre de fantômes dans le labyrinthe
+#define NB_FANTOMES 4 // Nombre de fantômes
 
 int main() {
-    // Création du labyrinthe
+    // Creation du labyrinthe
     Labyrinthe labyrinthe;
     initialiser_labyrinthe(&labyrinthe);
     placer_murs(&labyrinthe);
 
-    // Création des pac-gommes
+    // Creation des pacgommes
     Position pacgommes[TAILLE_LABYRINTHE * TAILLE_LABYRINTHE];
     int nombre_pacgommes = TAILLE_LABYRINTHE * TAILLE_LABYRINTHE;
     initialiser_pacgommes(&labyrinthe, pacgommes, nombre_pacgommes);
-    // Création du pacman
+    // Creation du pacman
     Pacman pacman;
     initialiser_pacman(&pacman, &labyrinthe);
 
-    // Création des fantômes
+    // Creation des fantomes
     Fantome fantomes[NB_FANTOMES];
     initialiser_fantomes(fantomes, NB_FANTOMES, &labyrinthe);
 
-    // Boucle de jeu
+    // Jeu
     int partie_terminee = 0;
     while (!partie_terminee) {
-        system("clear"); // Efface l'écran (fonctionne sous Linux/Unix)
+        system("clear");
 
-        // Affichage du labyrinthe
         afficher_labyrinthe(labyrinthe);
 
-        // Déplacement du pacman
         deplacer_pacman(&pacman, &labyrinthe, pacgommes, &nombre_pacgommes);
 
-        // Déplacement des fantômes
         deplacer_fantomes(fantomes, NB_FANTOMES, &labyrinthe);
 
-        // TODO: Ajouter d'autres conditions de fin de partie (ex: nombre de vies épuisé)
+        // Il faut gere le vie encore
 
-        // Condition de fin de partie (exemple: plus de pac-gommes)
         if (nombre_pacgommes == 0) {
             partie_terminee = 1;
-            printf("Félicitations ! Vous avez mangé toutes les pac-gommes. Vous avez gagné !\n");
+            printf("Félicitations ! Vous avez fini de mangé toutes les pac-gommes.!\n");
         }
 
-        // Pause pour ralentir l'affichage (peut être ajustée)
         system("sleep 1");
     }
 
